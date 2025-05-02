@@ -39,7 +39,7 @@ To visually explore the relationships between numerical features, a pairplot was
 In contrast, most other features, such as humidity, square footage, renewable energy, and occupancy, show no clear linear pattern with energy consumption in the scatter plots. This suggests that their individual contribution to the target variable may be limited or more complex (e.g., nonlinear or interaction-based).
 
 
-![Local Image](./images/correlation_heat_map .png)
+![Local Image](./images/correlation_heat_map.png)
 
 To quantify linear relationships between variables, a correlation heatmap was created. This visualization highlights the strength and direction of pairwise correlations among numerical features, particularly in relation to the target variable, energy consumption. The most significant insight is the strong positive correlation between temperature and energy consumption (correlation coefficient ≈ 0.70), reinforcing the observation from the pairplot. This confirms that temperature is a key driver of energy usage.
 The variable occupancy also shows a modest positive correlation with energy consumption (≈ 0.19), indicating that more occupants tend to be associated with higher energy use, though the relationship is not as strong.
