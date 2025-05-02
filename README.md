@@ -39,7 +39,7 @@ To visually explore the relationships between numerical features, a pairplot was
 In contrast, most other features, such as humidity, square footage, renewable energy, and occupancy, show no clear linear pattern with energy consumption in the scatter plots. This suggests that their individual contribution to the target variable may be limited or more complex (e.g., nonlinear or interaction-based).
 
 
-![Local Image](./images/correlation_heat_map.png)
+![Local Image](./images/correlation_heat_map .png)
 
 To quantify linear relationships between variables, a correlation heatmap was created. This visualization highlights the strength and direction of pairwise correlations among numerical features, particularly in relation to the target variable, energy consumption. The most significant insight is the strong positive correlation between temperature and energy consumption (correlation coefficient ≈ 0.70), reinforcing the observation from the pairplot. This confirms that temperature is a key driver of energy usage.
 The variable occupancy also shows a modest positive correlation with energy consumption (≈ 0.19), indicating that more occupants tend to be associated with higher energy use, though the relationship is not as strong.
@@ -63,7 +63,7 @@ Interestingly, renewable energy also displays a somewhat uniform and spread-out 
 |RenewableEnergy  |	Not Gaussian | 871.02	| 7.24e-190
 |EnergyConsumption|	Gaussian | 	5.10	| 0.078                                     |
 
-To statistically assess whether the numerical features follow a Gaussian distribution, the D’Agostino and Pearson’s normality test was applied to each variable. This test evaluates skewness and kurtosis to determine if a distribution significantly deviates from normality. The results confirm what the KDE plots visually suggested:
+To statistically assess whether the numerical features follow a Gaussian distribution, the D’Agostino-Pearson’s normality test was applied to each variable. This test evaluates skewness and kurtosis to determine if a distribution significantly deviates from normality. The results confirm what the KDE plots visually suggested:
 
 - All features except energy consumption were found to be non-Gaussian, with extremely low p-values (≪ 0.05), indicating strong evidence against the null hypothesis of normality.
 - In contrast, energy consumption was the only feature that did not reject normality at the 5% significance level, with a p-value of approximately 0.078. This aligns with its relatively symmetric and bell-shaped distribution seen earlier.
