@@ -116,5 +116,22 @@ Final Results
 
 Among all models, Linear Regression achieved the lowest RMSE despite its simplicity, suggesting that the relationships in the dataset may be largely linear or that the categorical encoding favored this model.
 Nevertheless, Gradient Boosting (after tuning) came very close in performance, and given its flexibility, it may be preferred in real-world applications where generalization across unseen scenarios is critical.
-To better understand how each model performs beyond the RMSE metric, we visualized the distribution of actual versus predicted energy consumption. Below is the plot for Linear Regression, showing how closely the predicted values align with the actual distribution, 
+To better understand each model’s performance beyond the RMSE metric, we visualized the distribution of predicted versus actual energy consumption. The following figures show how closely each model’s predictions align with the actual data distribution:
 
+Linear Regression;
+
+![Local Image](./images/linear_regression.png)
+
+SVR;
+
+![Local Image](./images/SVR.png)
+
+Random Forest Regressor;
+
+![Local Image](./images/random_forest.png)
+
+Gradient Boosting Regressor;
+
+![Local Image](./images/gradient_boosting.png)
+
+From these visualizations, we observe that ensemble methods like Random Forest and Gradient Boosting produce distributions that more closely follow the actual values, while simpler models like Linear Regression tend to underfit the variance in the data.
