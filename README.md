@@ -2,6 +2,10 @@
 
 1. [Dataset Description](#dataset-description-and-cleaning)
 2. [EDA (Exploratory Data Analysis)](#eda-exploratory-data-analysis)
+3. [Model Training](#model-training)
+   - [Model Overview](#model-overview)
+   - [Evaluation Metric](#evaluation-metric)
+   - [Hyperparameter Tuning](#hyperparameter-tuning) 
 
 ## Dataset Description and Cleaning
 
@@ -68,10 +72,49 @@ To statistically assess whether the numerical features follow a Gaussian distrib
 - All features except energy consumption were found to be non-Gaussian, with extremely low p-values (≪ 0.05), indicating strong evidence against the null hypothesis of normality.
 - In contrast, energy consumption was the only feature that did not reject normality at the 5% significance level, with a p-value of approximately 0.078. This aligns with its relatively symmetric and bell-shaped distribution seen earlier.
 
+## Model Training
 
+To predict energy consumption based on the features in our dataset, we evaluated four different machine learning models: Linear Regression, Support Vector Regressor (SVR), Random Forest Regressor, and Gradient Boosting Regressor.
+These models were chosen for their diversity in learning strategies ranging from simple linear modeling to powerful ensemble methods capable of capturing complex patterns.
 
+### Model Overview
 
+- Linear Regression:
+  A baseline model that assumes a linear relationship between the features and the target. It is fast and interpretable but         performs poorly when the underlying data relationships are non-linear or complex.
 
+- Support Vector Regressor (SVR):
+  Effective for capturing non-linear relationships, especially with the RBF kernel. However, SVR is sensitive to feature scaling    and computationally expensive on larger datasets.
 
+- Random Forest Regressor:
+  An ensemble of decision trees that reduces overfitting by averaging multiple models. It handles non-linearities well and is       robust to outliers. However, it can be less interpretable and may require tuning for optimal performance.
 
+- Gradient Boosting Regressor:
+  A sequential ensemble technique that improves performance by correcting the errors of previous models. It often achieves high     accuracy but is more sensitive to hyperparameters and slower to train compared to Random Forests.
+
+### Evaluation Metric
+
+All models were evaluated using Root Mean Squared Error (RMSE), which is suitable for regression tasks where larger errors should be penalized more heavily. RMSE is defined as:
+
+$RMSE = \sqrt(\frac{1}{n} \Sigma_{i =1}^n (y_i - \hat{y}_i)^2$,
+
+it provides an interpretable measure of prediction error in the same units as the target variable (in this case, energy consumption).
+
+### Hyperparameter Tuning
+
+We applied hyperparameter tuning using GridSearchCV to the Random Forest and Gradient Boosting models. These ensemble methods benefit the most from tuning due to the number of hyperparameters involved (e.g., tree depth, number of estimators, learning rate). Grid search was performed over a predefined range of values with 5-fold cross-validation, optimizing for RMSE via a custom scoring function.
+Tuning these models helped improve generalization and slightly reduced the prediction error on the test set, as reflected in the final RMSE values.
+
+Final Results 
+| Model         |	Tunned | RSME |                                                
+|-----------------|-------------------|----------------|
+|Linear Regression        |	---     |  4.9022 | 
+|SVR      |	---   |5.8342	 |	
+|Random Forest Regressor         |	No 	|  5.2306| 
+|Random Forest Regressor         |	Yes 	|  5.1147| 
+|Gradient Boosting Regressor  |	No | 5.4768	|
+|Gradient Boosting Regressor  |	Yes |  5.0340	|
+
+Among all models, Linear Regression achieved the lowest RMSE despite its simplicity, suggesting that the relationships in the dataset may be largely linear or that the categorical encoding favored this model.
+Nevertheless, Gradient Boosting (after tuning) came very close in performance, and given its flexibility, it may be preferred in real-world applications where generalization across unseen scenarios is critical.
+To better understand how each model performs beyond the RMSE metric, we visualized the distribution of actual versus predicted energy consumption. Below is the plot for Linear Regression, showing how closely the predicted values align with the actual distribution, 
 
