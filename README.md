@@ -146,19 +146,21 @@ Example Usage:
 Once the application is running (by executing python deployed_flask.py), users can interact with the API using tools such as curl. Below is an example request:
 
 ```
-curl -X POST http://localhost:9696/forecast_demand \
-     -H "Content-Type: application/json" \
-     -d '{"temperature": 25.14,
-          "humidity": 43.43,
-          "squarefootage": 1565.69,
-          "occupancy": 5,
-          "hvacusage": "on",
-          "lightingusage": "off",
-          "dayofweek": "monday",
-          "holiday": "no",
-          "month": 1,
-          "day": 1,
-          "hour": 0}'
+curl -X POST http://localhost:9696/forecast_demand
+ -H "Content-Type: application/json"
+ -d "{\"temperature\":25.1394334377269,
+      \"humidity\":43.43158120480281,
+      \"squarefootage\":1565.6939992511177,
+      \"occupancy\":5,
+      \"hvacusage\":\"on\",
+      \"lightingusage\":\"off\",
+      \"dayofweek\":\"monday\",
+      \"holiday\":\"no\",
+      \"month\":1,
+      \"day\":1,
+      \"hour\":0}"
+
+curl -X POST http://localhost:9696/forecast_demand -H "Content-Type: application/json" -d "{\"temperature\":25.1394334377269,\"humidity\":43.43158120480281,\"squarefootage\":1565.6939992511177,\"occupancy\":5,\"hvacusage\":\"on\",\"lightingusage\":\"off\",\"dayofweek\":\"monday\",\"holiday\":\"no\",\"month\":1,\"day\":1,\"hour\":0}"
 ```
 
 The server responds with a JSON object containing the predicted energy consumption from each of the models:
