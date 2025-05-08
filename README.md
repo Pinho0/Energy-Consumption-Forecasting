@@ -5,7 +5,8 @@
 3. [Model Training](#model-training)
    - [Model Overview](#model-overview)
    - [Evaluation Metric](#evaluation-metric)
-   - [Hyperparameter Tuning](#hyperparameter-tuning) 
+   - [Hyperparameter Tuning](#hyperparameter-tuning)
+4. [Deployment: Flask-Based Web Service](#deployment-flask-based-web-service)
 
 ## Dataset Description and Cleaning
 
@@ -135,3 +136,42 @@ Gradient Boosting Regressor;
 ![Local Image](./images/gradient_boosting.png)
 
 From these visualizations, we observe that ensemble methods like Random Forest and Gradient Boosting produce distributions that more closely follow the actual values, while simpler models like Linear Regression tend to underfit the variance in the data.
+
+## Deployment: Flask-Based Web Service
+
+To make the trained machine learning models accessible for inference, they were deployed using a Flask web application. Flask is a lightweight Python web framework that allows for quickly creating APIs to serve models. The deployment logic is implemented in a file named deployed_flask.py. This application loads the trained models and the DictVectorizer object used during preprocessing. It exposes a single endpoint /forecast_demand which accepts POST requests with energy consumption-related features in JSON format and returns the predicted values from all four models.
+
+Example Usage:
+
+Once the application is running (by executing python deployed_flask.py), users can interact with the API using tools such as curl. Below is an example request:
+
+```
+curl -X POST http://localhost:9696/forecast_demand \
+     -H "Content-Type: application/json" \
+     -d '{"temperature": 25.14,
+          "humidity": 43.43,
+          "squarefootage": 1565.69,
+          "occupancy": 5,
+          "hvacusage": "on",
+          "lightingusage": "off",
+          "dayofweek": "monday",
+          "holiday": "no",
+          "month": 1,
+          "day": 1,
+          "hour": 0}'
+```
+
+The server responds with a JSON object containing the predicted energy consumption from each of the models:
+
+```
+{
+  "prediction_linear_regression": 78.23,
+  "prediction_svr": 76.54,
+  "prediction_random_forest_regressor": 79.88,
+  "prediction_gradient_boosting_regressor": 77.65
+}
+```
+
+This setup makes the prediction pipeline accessible for integration with external applications, dashboards, or automation scripts.
+
+
