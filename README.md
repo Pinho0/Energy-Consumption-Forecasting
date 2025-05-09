@@ -7,6 +7,7 @@
    - [Evaluation Metric](#evaluation-metric)
    - [Hyperparameter Tuning](#hyperparameter-tuning)
 4. [Deployment: Flask-Based Web Service](#deployment-flask-based-web-service)
+5. [Cloud Deployment](#cloud-deployment)
 
 ## Dataset Description and Cleaning
 
@@ -176,4 +177,49 @@ The server responds with a JSON object containing the predicted energy consumpti
 
 This setup makes the prediction pipeline accessible for integration with external applications, dashboards, or automation scripts.
 
+## Cloud Deployment
 
+To demonstrate the scalability and cloud-readiness of the energy consumption prediction application, the trained machine learning models were containerized and deployed using Docker and Kubernetes. Although the deployment was performed locally using Minikube (a local Kubernetes environment), the entire workflow replicates the same steps that would be taken to deploy the application to a real cloud service like AWS, GCP, or Azure.
+
+### Docker Image Creation
+
+The Flask application (deployed_flask.py) exposes an endpoint /forecast_demand that returns predictions from four trained regression models (Linear Regression, SVR, Random Forest, Gradient Boosting). The models directory containing all serialized .bin model files was added to the Docker image along with the Flask code.
+
+The requirements.txt contained:
+
+```
+flask
+scikit-learn
+```
+
+A Dockerfile was written to package the application, to build and tag the image: 
+
+```
+docker build -t energy-consumption-prediction .
+docker tag energy-consumption-prediction YOUR_DOCKERHUB_USERNAME/energy-consumption-prediction
+docker push YOUR_DOCKERHUB_USERNAME/energy-consumption-prediction
+```
+
+For the Kubernetes cluster setup, instead of configuring a full cloud environment, Minikube was used for simplicity. Minikube simulates a Kubernetes cluster locally and can be start by just using 
+
+```
+minikube start
+```
+
+### Deployment Configuration
+
+Two configuration files were created: deployment.yaml and service.yaml, to apply this configuration just use:
+
+```
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+```
+
+Pods and services can be monitored with:
+
+```
+kubectl get pods
+kubectl get services
+```
+
+if any issues occur (such as CrashLoopBackOff), logs can be viewed using ```kubectl logs POD_NAME```
