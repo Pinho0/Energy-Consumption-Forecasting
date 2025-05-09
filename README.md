@@ -63,13 +63,13 @@ Interestingly, renewable energy also displays a somewhat uniform and spread-out 
 
 
 | Feature         |	Distribution Type | Test Statistic | p-value |                                                   
-|-----------------|-------------------|----------------|-------------------------------------------------|
-|Temperature        |	Not Gaussian      |   409.51 | 1.19e-89                           |
-|Humidity      |	Not Gaussian   |459.57 |	1.61e-100                                              |
-|SquareFootage         |	Not Gaussian 	| 947.45	| 1.84e-206                                       |
-|Occupancy    |	Not Gaussian  | 982.95	| 3.58e-214                                             |
-|RenewableEnergy  |	Not Gaussian | 871.02	| 7.24e-190
-|EnergyConsumption|	Gaussian | 	5.10	| 0.078                                     |
+|-----------------|-------------------|----------------|-------------------|
+|Temperature        |	Not Gaussian      |   409.51 | 1.19e-89            |
+|Humidity      |	Not Gaussian   |459.57 |	1.61e-100                     |
+|SquareFootage         |	Not Gaussian 	| 947.45	| 1.84e-206             |
+|Occupancy    |	Not Gaussian  | 982.95	| 3.58e-214                      |
+|RenewableEnergy  |	Not Gaussian | 871.02	| 7.24e-190                   |
+|EnergyConsumption|	Gaussian | 	5.10	| 0.078                             |
 
 To statistically assess whether the numerical features follow a Gaussian distribution, the D’Agostino-Pearson’s normality test was applied to each variable. This test evaluates skewness and kurtosis to determine if a distribution significantly deviates from normality. The results confirm what the KDE plots visually suggested:
 
