@@ -8,6 +8,8 @@
    - [Hyperparameter Tuning](#hyperparameter-tuning)
 4. [Deployment: Flask-Based Web Service](#deployment-flask-based-web-service)
 5. [Cloud Deployment](#cloud-deployment)
+   - [Docker Image Creation](#docker-image-creation)
+   - [Deployment Configuration](#deployment-configuration)
 
 ## Dataset Description and Cleaning
 
@@ -31,7 +33,7 @@ This dataset captures a wide range of features that influence energy consumption
 |EnergyConsumption|	Actual energy consumption value (target variable).                                         |
 
 
-All data cleaning and preprocessing steps are implemented in the file processing_and_EDA.py
+All data cleaning and preprocessing steps are implemented in the file `processing_and_EDA.py`
 
 The dataset was first loaded using pandas, and all column names were standardized by converting them to lowercase and replacing spaces with underscores to ensure consistency and ease of reference. The timestamp column was then processed to extract temporal components such as month, day, and hour, allowing for more flexible time-based analysis. Columns like year, minute, and second were removed after confirming they contained no useful variation (e.g., the year was always 2022, and the minute/second fields were constant). Categorical string values throughout the dataset were cleaned by converting them to lowercase.
 The dataset’s features were then organized by data type: numerical columns (including occupancy, which was treated as a continuous variable despite being an integer) and categorical columns. Duplicate rows were removed to avoid data leakage or bias in model training, and a check for missing values was performed, none were found, so no imputation was necessary.
@@ -140,11 +142,11 @@ From these visualizations, we observe that ensemble methods like Random Forest a
 
 ## Deployment: Flask-Based Web Service
 
-To make the trained machine learning models accessible for inference, they were deployed using a Flask web application. Flask is a lightweight Python web framework that allows for quickly creating APIs to serve models. The deployment logic is implemented in a file named deployed_flask.py. This application loads the trained models and the DictVectorizer object used during preprocessing. It exposes a single endpoint /forecast_demand which accepts POST requests with energy consumption-related features in JSON format and returns the predicted values from all four models.
+To make the trained machine learning models accessible for inference, they were deployed using a Flask web application. Flask is a lightweight Python web framework that allows for quickly creating APIs to serve models. The deployment logic is implemented in a file named `deployed_flask.py`. This application loads the trained models and the DictVectorizer object used during preprocessing. It exposes a single endpoint /forecast_demand which accepts POST requests with energy consumption-related features in JSON format and returns the predicted values from all four models.
 
 Example Usage:
 
-Once the application is running (by executing python deployed_flask.py), users can interact with the API using tools such as curl. Below is an example request:
+Once the application is running (by executing python `deployed_flask.py`), users can interact with the API using tools such as curl. Below is an example request:
 
 ```
 curl -X POST http://localhost:9696/forecast_demand
@@ -183,7 +185,7 @@ To demonstrate the scalability and cloud-readiness of the energy consumption pre
 
 ### Docker Image Creation
 
-The Flask application (deployed_flask.py) exposes an endpoint /forecast_demand that returns predictions from four trained regression models (Linear Regression, SVR, Random Forest, Gradient Boosting). The models directory containing all serialized .bin model files was added to the Docker image along with the Flask code.
+The Flask application (`deployed_flask.py`) exposes an endpoint /forecast_demand that returns predictions from four trained regression models (Linear Regression, SVR, Random Forest, Gradient Boosting). The models directory containing all serialized .bin model files was added to the Docker image along with the Flask code.
 
 The requirements.txt contained:
 
@@ -200,7 +202,7 @@ docker tag energy-consumption-prediction YOUR_DOCKERHUB_USERNAME/energy-consumpt
 docker push YOUR_DOCKERHUB_USERNAME/energy-consumption-prediction
 ```
 
-For the Kubernetes cluster setup, instead of configuring a full cloud environment, Minikube was used for simplicity. Minikube simulates a Kubernetes cluster locally and can be start by just using 
+For the Kubernetes cluster setup, instead of configuring a full cloud environment, Minikube was used for simplicity. 
 
 ```
 minikube start
@@ -208,18 +210,26 @@ minikube start
 
 ### Deployment Configuration
 
-Two configuration files were created: deployment.yaml and service.yaml, to apply this configuration just use:
+Two configuration files were created: `deployment.yaml` and `service.yaml`. Apply them with:
 
 ```
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
 
-Pods and services can be monitored with:
+To monitor the cluster:
 
 ```
 kubectl get pods
 kubectl get services
 ```
 
-if any issues occur (such as CrashLoopBackOff), logs can be viewed using ```kubectl logs POD_NAME```
+if any issues occur (such as CrashLoopBackOff), logs can be viewed using  ```kubectl logs POD_NAME```
+
+To acess the flask service run, ``` minikube service energy-service --url```. This returns a URL like http://192.168.49.2:32769, which can be used to send POST requests, example:
+
+```
+curl -X POST http://127.0.0.1:60292/forecast_demand -H "Content-Type: application/json" -d "{\"temperature\":25.1394334377269,\"humidity\":43.43158120480281,\"squarefootage\":1565.6939992511177,\"occupancy\":5,\"hvacusage\":\"on\",\"lightingusage\":\"off\",\"dayofweek\":\"monday\",\"holiday\":\"no\",\"month\":1,\"day\":1,\"hour\":0}"
+```
+
+This deployment demonstrates how a machine learning model can be made production-ready and deployed using modern container orchestration tools. While Minikube was used for simplicity, the process is directly transferable to managed cloud Kubernetes services like Amazon EKS, Google GKE, or Azure AKS.
